@@ -3,6 +3,8 @@
 use App\Http\Controllers\API\MetodePembayaranController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\API\PesananController;
+use App\Http\Controllers\API\PendapatanController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,6 +22,13 @@ Route::post('metode_pembayaran/store', [MetodePembayaranController::class, 'stor
 Route::get('metode_pembayaran/show/{id}', [MetodePembayaranController::class, 'show']);
 Route::post('metode_pembayaran/update/{id}', [MetodePembayaranController::class, 'update']);
 Route::get('metode_pembayaran/destroy/{id}', [MetodePembayaranController::class, 'destroy']);
+
+Route::get('pesanan', [PesananController::class, 'index']);
+Route::post('pesanan/store', [PesananController::class, 'store']);
+Route::get('pesanan/show/{id}', [PesananController::class, 'show']);
+
+Route::get('pendapatan', [PendapatanController::class, 'index']);
+Route::post('pendapatan/store', [PendapatanController::class, 'store']);
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
