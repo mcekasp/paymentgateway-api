@@ -45,14 +45,14 @@ class PendapatanController extends Controller
     {
         try {
             $request->validate([
+                'id_pesanan' => 'required',
                 'id_ticket' => 'required',
                 'tarif_transaksi' => 'required',
             ]);
 
-            $idPesanan['id_pesanan'] = pesanan()->id;
 
             $pendapatan = Pendapatan::create([
-                'id_pesanan' => $idPesanan,
+                'id_pesanan' => $request->id_pesanan,
                 'id_ticket' => $request->id_ticket,
                 'tarif_transaksi' => $request->tarif_transaksi,
             ]);
@@ -78,7 +78,13 @@ class PendapatanController extends Controller
      */
     public function show($id)
     {
-        //
+        $data = Pendapatan::where('id_pendapatan', '=', $id)->get();
+
+            if($data){
+                return apiFormatter::createAPI(200, 'Berhasil', $data);
+            }else{
+                return apiFormatter::createAPI(400, 'Gagal');
+            }
     }
 
     /**
