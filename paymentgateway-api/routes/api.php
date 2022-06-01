@@ -36,6 +36,8 @@ Route::get('pesanan/show/{id}', [PesananController::class, 'show']);
 Route::get('pendapatan', [PendapatanController::class, 'index']);
 Route::post('pendapatan/store', [PendapatanController::class, 'store']);
 
+Route::get('pendapatan/show/{id_pendapatan}', [PendapatanController::class, 'show']);
+
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
