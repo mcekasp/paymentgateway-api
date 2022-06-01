@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\API\LoggingController;
 use App\Http\Controllers\API\MetodePembayaranController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -20,6 +21,11 @@ Route::post('metode_pembayaran/store', [MetodePembayaranController::class, 'stor
 Route::get('metode_pembayaran/show/{id}', [MetodePembayaranController::class, 'show']);
 Route::post('metode_pembayaran/update/{id}', [MetodePembayaranController::class, 'update']);
 Route::get('metode_pembayaran/destroy/{id}', [MetodePembayaranController::class, 'destroy']);
+
+Route::get('logging', [LoggingController::class, 'index']);
+Route::post('logging/store', [LoggingController::class, 'store']);
+Route::get('logging/show/{id_logging}', [LoggingController::class, 'show']);
+Route::post('logging/update/{id_logging}', [LoggingController::class, 'update']);
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
