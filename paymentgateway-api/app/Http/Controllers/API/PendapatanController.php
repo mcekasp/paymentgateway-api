@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Pendapatan;
 use App\Helpers\apiFormatter;
+use Exception;
 
 class PendapatanController extends Controller
 {
