@@ -18,4 +18,13 @@ class Metode_Pembayaran extends Model
     ];
 
     protected $hidden = [];
+
+    public function pesanan()
+    {
+        return $this->hasMany(Pesanan::class, 'id_metode', 'id');
+    }
+    public function pendapatan()
+    {
+        return $this->hasMany(Pendapatan::class);
+    }
 }

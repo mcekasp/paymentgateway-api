@@ -20,6 +20,6 @@ class Pendapatan extends Model
     ];
     public function pesanan()
     {
-        return $this->hasOne(Pesanan::class);
+        return $this->belongsTo(Pesanan::class, 'id_pesanan', 'id_pesanan');
     }
 }

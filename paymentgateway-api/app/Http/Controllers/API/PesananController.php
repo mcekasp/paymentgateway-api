@@ -4,7 +4,9 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use App\Models\Pesanan;
+use App\Models\Pendapatan;
 use App\Helpers\apiFormatter;
 use Exception;
 
@@ -63,16 +65,27 @@ class PesananController extends Controller
                 'status' => $request->status
             ]);
 
-            $data = Pesanan::where('id_pesanan', '=', $pesanan->id)->get();
+            $tarif = DB::table('metode_pembayaran')
+                        ->where('id', '=' , $request->id_metode)
+                        ->pluck('tarif_transaksi');
+            
+            $pendapatan = Pendapatan::create([
+                'id_pesanan' => $pesanan->id,
+                'id_ticket' => $request->id_ticket,
+                'tarif_transaksi' => $tarif[0],
+            ]);
 
-            if($data){
-                return apiFormatter::createAPI(200, 'Berhasil', $data);
+            $data1 = Pesanan::where('id_pesanan', '=', $pesanan->id)->get();
+            $data2 = Pendapatan::where('id_pendapatan', '=', $pendapatan->id)->get();
+
+            if($data2){
+                return apiFormatter::createAPI(200, 'Berhasil', $data2);
             }else{
                 return apiFormatter::createAPI(400, 'Gagal');
             }
 
         } catch (Exception $error) {
-            return apiFormatter::createAPI(400, 'Gagal');
+            return $error;
         }
     }
 

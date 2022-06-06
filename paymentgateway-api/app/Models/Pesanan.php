@@ -20,8 +20,12 @@ class Pesanan extends Model
         'total',
         'status',
     ];
+    public function metode_pembayaran()
+    {
+        return $this->belongsTo(Metode_Pembayaran::class,'id_metode','id');
+    }
     public function pendapatan()
     {
-        return $this->hasOne(Pendapatan::class);
+        return $this->hasOne(Metode_Pembayaran::class,'id_pesanan','id_pesanan');
     }
 }
