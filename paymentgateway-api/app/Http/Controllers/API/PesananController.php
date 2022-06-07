@@ -53,7 +53,6 @@ class PesananController extends Controller
                 'id_ticket' => 'required',
                 'id_metode' => 'required',
                 'total' => 'required',
-                'status' => 'required',
             ]);
 
             $pesanan = Pesanan::create([

@@ -21,9 +21,7 @@ class CreatePesananTable extends Migration
             $table->foreignId('id_metode');
             $table->timestamp('tanggal_pesanan');
             $table->integer('total');
-            $table->boolean('status')->nullable();
             $table->softDeletes();
-            $table->timestamps();
         });
     }
 
