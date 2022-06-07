@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\Pesanan;
 use App\Models\Pendapatan;
+use App\Models\Logging;
 use App\Helpers\apiFormatter;
 use Exception;
 
@@ -49,36 +50,59 @@ class PesananController extends Controller
         try {
             $request->validate([
                 'id_pelanggan' => 'required',
-                'id_vendor' => 'required',
-                'id_ticket' => 'required',
-                'id_metode' => 'required',
+                'nama_pelanggan' => 'required',
+                'id_tiket_hotel' => 'nullable',
+                'id_tiket_transportasi' => 'nullable',
+                'metode_pembayaran' => 'required',
                 'total' => 'required',
             ]);
 
             $pesanan = Pesanan::create([
                 'id_pelanggan' => $request->id_pelanggan,
-                'id_vendor' => $request->id_vendor,
-                'id_ticket' => $request->id_ticket,
-                'id_metode' => $request->id_metode,
+                'nama_pelanggan' => $request->nama_pelanggan,
+                'id_tiket_hotel' => $request->id_tiket_hotel,
+                'id_tiket_transportasi' => $request->id_tiket_transportasi,
+                'metode_pembayaran' => $request->metode_pembayaran,
                 'total' => $request->total,
-                'status' => $request->status
+                'kode_bayar' => $this->generateUniqueCode()
             ]);
 
+            $get_kode = DB::table('pesanan')->where('id_pesanan', '=', $pesanan->id)->pluck('kode_bayar');
+            $kode = $get_kode[0];
+
             $tarif = DB::table('metode_pembayaran')
-                        ->where('id', '=' , $request->id_metode)
+                        ->where('id', '=' , $request->metode_pembayaran)
                         ->pluck('tarif_transaksi');
+            $penyedia = DB::table('metode_pembayaran')
+                        ->where('id', '=' , $request->metode_pembayaran)
+                        ->pluck('nama_penyedia');
+
+            $total = $request->total;
+            $setor_vendor = $total - $tarif[0];
+
+            $logging = Logging::create([
+                'id_pesanan' => $pesanan->id,
+                'nama_pelanggan' => $request->nama_pelanggan,
+                'id_tiket_hotel' => $request->id_tiket_hotel,
+                'id_tiket_transportasi' => $request->id_tiket_transportasi,
+                'metode_pembayaran' => $penyedia[0],
+                'total' => $setor_vendor,
+                'kode_bayar' => $kode
+            ]);
             
             $pendapatan = Pendapatan::create([
                 'id_pesanan' => $pesanan->id,
-                'id_ticket' => $request->id_ticket,
+                'id_tiket_hotel' => $request->id_tiket_hotel,
+                'id_tiket_transportasi' => $request->id_tiket_transportasi,
                 'tarif_transaksi' => $tarif[0],
             ]);
-
+            
             $data1 = Pesanan::where('id_pesanan', '=', $pesanan->id)->get();
             $data2 = Pendapatan::where('id_pendapatan', '=', $pendapatan->id)->get();
+            $data3 = Logging::where('id_logging', '=', $logging->id)->get();
 
-            if($data2){
-                return apiFormatter::createAPI(200, 'Berhasil', $data2);
+            if($data3){
+                return apiFormatter::createAPI(200, 'Pemesanan Berhasil! Kode Pembayaran Anda : ' . $kode, $data1);
             }else{
                 return apiFormatter::createAPI(400, 'Gagal');
             }
@@ -137,5 +161,14 @@ class PesananController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function generateUniqueCode()
+    {
+        do {
+            $code = random_int(1000000000000000, 9999999999999999);
+        } while (Pesanan::where("kode_bayar", "=", $code)->first());
+  
+        return $code;
     }
 }

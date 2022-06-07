@@ -14,12 +14,17 @@ class Pesanan extends Model
     protected $table = 'pesanan';
     protected $fillable = [
         'id_pelanggan',
-        'id_vendor',
-        'id_ticket',
-        'id_metode',
+        'nama_pelanggan',
+        'id_tiket_hotel',
+        'id_tiket_transportasi',
+        'metode_pembayaran',
         'total',
-        'status',
+        'kode_bayar'
     ];
+    
+    const CREATED_AT = 'tanggal_pesanan';
+    const UPDATED_AT = 'tanggal_pembayaran';
+
     public function metode_pembayaran()
     {
         return $this->belongsTo(Metode_Pembayaran::class,'id_metode','id');
@@ -27,5 +32,9 @@ class Pesanan extends Model
     public function pendapatan()
     {
         return $this->hasOne(Metode_Pembayaran::class,'id_pesanan','id_pesanan');
+    }
+    public function logging()
+    {
+        return $this->hasOne(Logging::class,'id_pesanan','id_pesanan');
     }
 }

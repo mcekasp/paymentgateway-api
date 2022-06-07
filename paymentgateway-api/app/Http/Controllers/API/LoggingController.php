@@ -108,28 +108,26 @@ class LoggingController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update($kode_bayar)
     {
         try {
-            $request->validate([
-                'id_pesanan' => 'required',
-                'id_vendor' => 'required',
-                'id_ticket' => 'required',
-                'total_pembayaran' => 'required',
-                'status' => 'required'
-            ]);
+            //$request->validate([
+            //    'id_pesanan' => 'required',
+            //    'id_vendor' => 'required',
+            //    'id_ticket' => 'required',
+            //    'total_pembayaran' => 'required',
+            //    'status' => 'required'
+            //]);
 
-            $logging = Logging::findOrFail($id);
+            //$logging = Logging::findOrFail($kode_bayar);
+            $logging = Logging::where('kode_bayar', '=', $kode_bayar);
 
             $logging->update([
-                'id_pesanan' => $request->id_pesanan,
-                'id_vendor' => $request->id_vendor,
-                'id_ticket' => $request->id_ticket,
-                'total_pembayaran' => $request->total_pembayaran,
-                'status' => $request->status
+                'status_pembayaran' => 0,
+                'tanggal_pembayaran' => now()
             ]);
 
-            $data = Logging::where('id_logging', '=', $logging->id)->get();
+            $data = Logging::where('kode_bayar', '=', $logging->kode_bayar)->get();
 
             if ($data) {
                 return apiFormatter::createAPI(200, "Success", $data);
@@ -137,7 +135,7 @@ class LoggingController extends Controller
                 return apiFormatter::createAPI(400, "Failed");
             }
         } catch (Exception $error) {
-            return apiFormatter::createAPI(400, "Failed");
+            return $error;
         }
     }
 

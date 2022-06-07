@@ -21,11 +21,20 @@ class Logging extends Model
 
     protected $fillable = [
         'id_pesanan',
-        'id_vendor',
-        'id_ticket',
-        'total_pembayaran',
-        'status'
+        'nama_pelanggan',
+        'id_tiket_hotel',
+        'id_tiket_transportasi',
+        'metode_pembayaran',
+        'total',
+        'kode_bayar'
     ];
+    const CREATED_AT = 'tanggal_pesanan';
+    const UPDATED_AT = 'tanggal_pembayaran';
 
     protected $hidden = [];
+
+    public function pesanan()
+    {
+        return $this->belongsTo(Pesanan::class, 'id_pesanan', 'id_pesanan');
+    }
 }

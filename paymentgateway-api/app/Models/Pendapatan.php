@@ -14,8 +14,8 @@ class Pendapatan extends Model
     protected $table = 'pendapatan';
     protected $fillable = [
         'id_pesanan',
-        'id_ticket',
-        'tanggal_pembayaran',
+        'id_tiket_hotel',
+        'id_tiket_transportasi',
         'tarif_transaksi',
     ];
     public function pesanan()

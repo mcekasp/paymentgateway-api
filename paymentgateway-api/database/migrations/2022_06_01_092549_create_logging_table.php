@@ -16,13 +16,16 @@ class CreateLoggingTable extends Migration
         Schema::create('logging', function (Blueprint $table) {
             $table->id('id_logging');
             $table->foreignId('id_pesanan');
-            $table->foreignId('id_vendor');
-            $table->foreignId('id_ticket');
-            $table->integer('total_pembayaran');
-            $table->timestamp('tanggal_pembayaran');
-            $table->boolean('status')->nullable();
+            $table->string('nama_pelanggan');
+            $table->foreignId('id_tiket_hotel')->nullable();
+            $table->foreignId('id_tiket_transportasi')->nullable();
+            $table->string('metode_pembayaran');
+            $table->integer('total');
+            $table->bigInteger('kode_bayar');
+            $table->boolean('status_pembayaran')->default(false);
+            $table->timestamp('tanggal_pesanan', 0)->nullable();
+            $table->timestamp('tanggal_pembayaran', 0)->nullable();
             $table->softDeletes();
-            $table->timestamps();
         });
     }
 

@@ -27,7 +27,7 @@ Route::get('metode_pembayaran/destroy/{id}', [MetodePembayaranController::class,
 Route::get('logging', [LoggingController::class, 'index']);
 Route::post('logging/store', [LoggingController::class, 'store']);
 Route::get('logging/show/{id_logging}', [LoggingController::class, 'show']);
-Route::post('logging/update/{id_logging}', [LoggingController::class, 'update']);
+Route::post('logging/update/{kode_bayar}', [LoggingController::class, 'update']);
 
 Route::get('pesanan', [PesananController::class, 'index']);
 Route::post('pesanan/store', [PesananController::class, 'store']);
@@ -35,7 +35,6 @@ Route::get('pesanan/show/{id}', [PesananController::class, 'show']);
 
 Route::get('pendapatan', [PendapatanController::class, 'index']);
 Route::post('pendapatan/store', [PendapatanController::class, 'store']);
-
 Route::get('pendapatan/show/{id_pendapatan}', [PendapatanController::class, 'show']);
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {

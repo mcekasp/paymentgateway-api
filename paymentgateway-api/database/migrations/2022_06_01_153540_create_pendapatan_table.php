@@ -16,7 +16,8 @@ class CreatePendapatanTable extends Migration
         Schema::create('pendapatan', function (Blueprint $table) {
             $table->id('id_pendapatan');
             $table->foreignId('id_pesanan');
-            $table->foreignId('id_ticket');
+            $table->foreignId('id_tiket_hotel')->nullable();
+            $table->foreignId('id_tiket_transportasi')->nullable();
             $table->timestamp('tanggal_pembayaran');
             $table->integer('tarif_transaksi');
             $table->softDeletes();

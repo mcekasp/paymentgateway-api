@@ -47,14 +47,16 @@ class PendapatanController extends Controller
         try {
             $request->validate([
                 'id_pesanan' => 'required',
-                'id_ticket' => 'required',
+                'id_tiket_hotel' => 'nullable',
+                'id_tiket_transportasi' => 'nullable',
                 'tarif_transaksi' => 'required',
             ]);
 
 
             $pendapatan = Pendapatan::create([
                 'id_pesanan' => $request->id_pesanan,
-                'id_ticket' => $request->id_ticket,
+                'id_tiket_hotel' => $request->id_tiket_hotel,
+                'id_tiket_transportasi' => $request->id_tiket_transportasi,
                 'tarif_transaksi' => $request->tarif_transaksi,
             ]);
 
