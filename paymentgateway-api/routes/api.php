@@ -35,7 +35,10 @@ Route::get('pesanan/show/{id}', [PesananController::class, 'show']);
 
 Route::get('pendapatan', [PendapatanController::class, 'index']);
 Route::post('pendapatan/store', [PendapatanController::class, 'store']);
-Route::get('pendapatan/show/{id_pendapatan}', [PendapatanController::class, 'show']);
+Route::get('pendapatan/show/{id}', [PendapatanController::class, 'show']);
+
+Route::get('loggingForHotel', [LoggingController::class, 'forHotel']);
+Route::get('loggingForTransport', [LoggingController::class, 'forTransport']);
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();

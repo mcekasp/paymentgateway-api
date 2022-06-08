@@ -5,6 +5,8 @@ namespace App\Http\Controllers\API;
 use App\Helpers\apiFormatter;
 use App\Http\Controllers\Controller;
 use App\Models\Logging;
+use App\Models\Pendapatan;
+use Illuminate\Support\Facades\DB;
 use Exception;
 use Illuminate\Http\Request;
 
@@ -81,7 +83,7 @@ class LoggingController extends Controller
      */
     public function show($id)
     {
-        $data = Logging::where('id_logging', '=', $id)->get();
+        $data = Logging::where('id', '=', $id)->get();
 
             if ($data) {
                 return apiFormatter::createAPI(200, "Success", $data);
@@ -111,26 +113,28 @@ class LoggingController extends Controller
     public function update($kode_bayar)
     {
         try {
-            //$request->validate([
-            //    'id_pesanan' => 'required',
-            //    'id_vendor' => 'required',
-            //    'id_ticket' => 'required',
-            //    'total_pembayaran' => 'required',
-            //    'status' => 'required'
-            //]);
-
             //$logging = Logging::findOrFail($kode_bayar);
-            $logging = Logging::where('kode_bayar', '=', $kode_bayar);
+            //$logging = Logging::where('kode_bayar', '=', $kode_bayar)->first();
+            $getlogging = DB::table('logging')->where('kode_bayar', '=', $kode_bayar)->pluck('id');
+            $idlogging = $getlogging[0];
 
+            $logging = Logging::findOrFail($idlogging);
             $logging->update([
-                'status_pembayaran' => 0,
+                'status_pembayaran' => 1,
+                //'tanggal_pembayaran' => now()
+            ]);
+            $logging->touch();
+
+            $pendapatan = Pendapatan::findOrFail($idlogging);
+            $pendapatan->update([
+                'status_pembayaran' => 1,
                 'tanggal_pembayaran' => now()
             ]);
 
             $data = Logging::where('kode_bayar', '=', $logging->kode_bayar)->get();
 
             if ($data) {
-                return apiFormatter::createAPI(200, "Success", $data);
+                return apiFormatter::createAPI(200, "Pembayaran dengan kode pembayaran : " . $logging->kode_bayar . " Berhasil dilakukan. Terima kasih!", $data);
             } else {
                 return apiFormatter::createAPI(400, "Failed");
             }
@@ -148,5 +152,29 @@ class LoggingController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function forHotel()
+    {
+        $hotel_payment = Logging::select('id','id_pesanan','nama_pelanggan','id_tiket_hotel','metode_pembayaran','total','kode_bayar','status_pembayaran','tanggal_pesanan','tanggal_pembayaran')
+                            ->where('id_tiket_transportasi', '=', null)->get();
+        
+        if ($hotel_payment) {
+            return apiFormatter::createAPI(200, "Success", $hotel_payment);
+        } else {
+            return apiFormatter::createAPI(400, "Failed");
+        }
+    }
+
+    public function forTransport()
+    {
+        $transport_payment = Logging::select('id','id_pesanan','nama_pelanggan','id_tiket_transportasi','metode_pembayaran','total','kode_bayar','status_pembayaran','tanggal_pesanan','tanggal_pembayaran')
+                            ->where('id_tiket_hotel', '=', null)->get();
+        
+        if ($transport_payment) {
+            return apiFormatter::createAPI(200, "Success", $transport_payment);
+        } else {
+            return apiFormatter::createAPI(400, "Failed");
+        }
     }
 }

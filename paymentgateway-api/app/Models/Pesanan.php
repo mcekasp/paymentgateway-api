@@ -29,10 +29,6 @@ class Pesanan extends Model
     {
         return $this->belongsTo(Metode_Pembayaran::class,'id_metode','id');
     }
-    public function pendapatan()
-    {
-        return $this->hasOne(Metode_Pembayaran::class,'id_pesanan','id_pesanan');
-    }
     public function logging()
     {
         return $this->hasOne(Logging::class,'id_pesanan','id_pesanan');

@@ -13,13 +13,19 @@ class Pendapatan extends Model
 
     protected $table = 'pendapatan';
     protected $fillable = [
-        'id_pesanan',
+        'id_logging',
         'id_tiket_hotel',
         'id_tiket_transportasi',
         'tarif_transaksi',
+        'status_pembayaran'
     ];
-    public function pesanan()
+
+    const CREATED_AT = 'tanggal_pesanan';
+    const UPDATED_AT = 'tanggal_pembayaran';
+
+    
+    public function logging()
     {
-        return $this->belongsTo(Pesanan::class, 'id_pesanan', 'id_pesanan');
+        return $this->hasOne(Logging::class, 'id_logging', 'id');
     }
 }

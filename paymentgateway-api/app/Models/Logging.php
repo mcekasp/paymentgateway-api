@@ -12,12 +12,8 @@ class Logging extends Model
     use SoftDeletes;
 
     protected $table = 'logging';
-    // protected $guarded = [
-    //     'id_logging',
-    //     'id_pesanan',
-    //     'id_vendor',
-    //     'id_ticket'
-    // ];
+    protected $touches = ['pesanan'];
+
 
     protected $fillable = [
         'id_pesanan',
@@ -26,7 +22,9 @@ class Logging extends Model
         'id_tiket_transportasi',
         'metode_pembayaran',
         'total',
-        'kode_bayar'
+        'kode_bayar',
+        'status_pembayaran',
+        'tanggal_pembayaran'
     ];
     const CREATED_AT = 'tanggal_pesanan';
     const UPDATED_AT = 'tanggal_pembayaran';
@@ -36,5 +34,9 @@ class Logging extends Model
     public function pesanan()
     {
         return $this->belongsTo(Pesanan::class, 'id_pesanan', 'id_pesanan');
+    }
+    public function pendapatan()
+    {
+        return $this->belongsTo(Pesanan::class, 'id_logging', 'id');
     }
 }

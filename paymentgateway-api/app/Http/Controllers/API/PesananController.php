@@ -91,15 +91,15 @@ class PesananController extends Controller
             ]);
             
             $pendapatan = Pendapatan::create([
-                'id_pesanan' => $pesanan->id,
+                'id_logging' => $logging->id,
                 'id_tiket_hotel' => $request->id_tiket_hotel,
                 'id_tiket_transportasi' => $request->id_tiket_transportasi,
                 'tarif_transaksi' => $tarif[0],
             ]);
             
             $data1 = Pesanan::where('id_pesanan', '=', $pesanan->id)->get();
-            $data2 = Pendapatan::where('id_pendapatan', '=', $pendapatan->id)->get();
-            $data3 = Logging::where('id_logging', '=', $logging->id)->get();
+            $data2 = Pendapatan::where('id', '=', $pendapatan->id)->get();
+            $data3 = Logging::where('id', '=', $logging->id)->get();
 
             if($data3){
                 return apiFormatter::createAPI(200, 'Pemesanan Berhasil! Kode Pembayaran Anda : ' . $kode, $data1);

@@ -14,7 +14,7 @@ class CreateLoggingTable extends Migration
     public function up()
     {
         Schema::create('logging', function (Blueprint $table) {
-            $table->id('id_logging');
+            $table->id();
             $table->foreignId('id_pesanan');
             $table->string('nama_pelanggan');
             $table->foreignId('id_tiket_hotel')->nullable();
