@@ -21,6 +21,6 @@ class Metode_Pembayaran extends Model
 
     public function pesanan()
     {
-        return $this->hasMany(Pesanan::class, 'id_metode', 'id');
+        return $this->hasMany(Pesanan::class, 'metode_pembayaran', 'id');
     }
 }
